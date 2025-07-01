@@ -24,7 +24,7 @@ export VLLM_URL="http://$(oc get routes llm-route -o jsonpath='{.spec.host}')/v1
 envsubst < llsCR.yaml | oc apply -f -
 ```
 
-## Optional: register a shield inside a pod
+## Step Optional: register a shield inside a pod
 
 ```bash
 curl -X 'POST' \
@@ -48,14 +48,14 @@ curl -X 'POST' \
   }'
 ```
 
-## Get the external route of the lls
+## Step 4. Get the external route of the lls
 
 ```bash
 oc expose service llamastack-custom-distribution-service --name=lls-route
 LLS_ROUTE=$(oc get route lls-route -o jsonpath='{.spec.host}')
 ```
 
-## Register a shield using the external route
+## Step 5. Register a shield using the external route
 
 ```bash
 curl -X 'POST' \
@@ -79,13 +79,13 @@ curl -X 'POST' \
 }'
 ```
 
-## View registered shields using the external route
+## Step 6. View registered shields using the external route
 
 ```bash
 curl -s "http://$LLS_ROUTE/v1/shields" | jq '.'
 ```
 
-## Send a message to the shield
+## Step 7. Send a message to the shield
 
 ```bash
 curl -X POST "http://$LLS_ROUTE/v1/safety/run-shield" \
