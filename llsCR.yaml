@@ -1,0 +1,27 @@
+apiVersion: llamastack.io/v1alpha1
+kind: LlamaStackDistribution
+metadata:
+  name: llamastack-custom-distribution
+spec:
+  replicas: 1
+  server:
+    containerSpec:
+      env:
+        - name: VLLM_URL
+          # value: 'http://llm-route-lls-fms.apps.rosa.trustyai-maciej.7fpc.p3.openshiftapps.com/v1'
+          value: "${VLLM_URL}"
+        - name: INFERENCE_MODEL
+          value: llm
+        - name: MILVUS_DB_PATH
+          value: ~/.llama/milvus.db
+        # - name: VLLM_TLS_VERIFY
+        #   value: 'false'
+        - name: FMS_ORCHESTRATOR_URL
+          # value: 'https://guardrails-orchestrator-lls-fms.apps.rosa.trustyai-maciej.7fpc.p3.openshiftapps.com'
+          value: "${FMS_ORCHESTRATOR_URL}"
+      name: llama-stack
+      port: 8321
+    distribution:
+      name: 'rh-dev'
+    storage:
+      size: 20Gi
