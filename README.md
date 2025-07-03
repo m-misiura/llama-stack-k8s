@@ -42,6 +42,11 @@ curl -X 'POST' \
       "detectors": {
         "hap": {
           "detector_params": {}
+        },
+        "regex": {
+        "detector_params": {
+            "regex": ["email", "ssn", "credit-card", "^hello$"]
+          }
         }
       }
     }
@@ -73,6 +78,11 @@ curl -X 'POST' \
     "detectors": {
       "hap": {
         "detector_params": {}
+      },
+      "regex": {
+        "detector_params": {
+          "regex": ["email", "ssn", "credit-card", "^hello$"]
+        }
       }
     }
   }
@@ -85,16 +95,32 @@ curl -X 'POST' \
 curl -s "http://$LLS_ROUTE/v1/shields" | jq '.'
 ```
 
-## Step 7. Send a message to the shield
+## Step 7. Send a message to the shield -- trigger the HAP detector
 
 ```bash
 curl -X POST "http://$LLS_ROUTE/v1/safety/run-shield" \
 -H "Content-Type: application/json" \
 -d '{
-  "shield_id": "hap_shield",
+  "shield_id": "composite_shield",
   "messages": [
     {
       "content": "You dotard, I really hate this",
+      "role": "system"
+    }
+  ]
+}' | jq '.'
+```
+
+## Step 8. Send a message to the shield -- trigger the regex detector
+
+```bash
+curl -X POST "http://$LLS_ROUTE/v1/safety/run-shield" \
+-H "Content-Type: application/json" \
+-d '{
+  "shield_id": "composite_shield",
+  "messages": [
+    {
+      "content": "My email is test@example.com",
       "role": "system"
     }
   ]
